@@ -14,14 +14,13 @@ Output should be in csv format but you'll have to use a '>' to capture it
 // number of times we'll run the test for each arraysize
 const int ACCURACY = 10; 
 // max memory to count up to (in bytes)
-const unsigned long MAX_MEMORY = 2147483648;
+const unsigned long MAX_MEMORY = 5000000;
 
 
-// gets an array size and makes an array of that size and then uses
+// gets an array size and an array then uses
 // that array by placing items in it and getting items out
-void reck_it(int arraysize){
+void reck_it(int arraysize, unsigned char* list){
     // using a char array since a char takes up 1 byte
-    unsigned char *list = (unsigned char *)malloc(arraysize*sizeof(unsigned char)); 
     unsigned long i;
     for (i = 0; i < arraysize; i++){
         list[i] = (unsigned char)(i % UCHAR_MAX);
@@ -32,7 +31,6 @@ void reck_it(int arraysize){
         y = list[i]; 
         k = y + 10;
     }
-    free(list);
 }
 
 
@@ -43,15 +41,17 @@ int main(){
     clock_t diff;
     unsigned long mem_size;
     printf("function, input, cycles,\n");
-    for ( mem_size = 2; mem_size < MAX_MEMORY; mem_size = mem_size*2){ 
+    for ( mem_size = 1000; mem_size < MAX_MEMORY; mem_size += 1000){ 
         // run test 'ACCURACY' times and then average the time
         int i;
         long timesum;
         for (i = 0; i < ACCURACY; i++){
+            unsigned char *list = (unsigned char *)malloc(mem_size*sizeof(unsigned char)); 
             start = clock();
-            reck_it(mem_size);
+            reck_it(mem_size, list);
             diff = clock() - start;
             timesum += diff;
+            free(list);
         }
         printf("reck_it, %lu, %ld,\n", mem_size, timesum/ACCURACY);
     }
