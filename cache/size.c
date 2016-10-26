@@ -42,7 +42,7 @@ int main(){
     for ( mem_size = 1000; mem_size < MAX_MEMORY; mem_size += 1000){ 
         // run test 'ACCURACY' times and then average the time
         int i;
-        long timesum;
+        long timesum = 0l;
         for (i = 0; i < ACCURACY; i++){
             unsigned char *list = (unsigned char *)malloc(mem_size*sizeof(unsigned char)); 
             clock_t start;

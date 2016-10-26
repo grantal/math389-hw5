@@ -3,22 +3,51 @@
 #include <time.h>
 #include <stdlib.h>
 
+// number of insersion tests to average
+const int ACCURACY = 10;
+// how big to make the heaps
+const int SIZE = 100000;
+
 
 int main () {
-    heap *h = new_heap(2, 100);
+    // generate ACCURACY arrays of SIZE random numbers so that the
+    // random numbers are the same for each heap
+    int randlists[ACCURACY][SIZE];
     srand(time(NULL));
     int i;
-    for (i = 0; i < 100; i++){
-        int r = rand() % 1000;   
-        heap_insert(h, r);
-    }
-    int nextparent = (h->current_index-1) / h->nokids;
-    for (i = h->current_index - 1; i > 0 ; i--){
-        if (nextparent == i){
-            nextparent = i/h->nokids;
-            printf("\n");
+    int j;
+    for (j = 0; j < ACCURACY; j++){
+        for (i = 0; i < SIZE; i++){
+            // random numbers will be capped at SIZE*10 so that 
+            // theres more diversity than if we capped it at SIZE
+            int r = rand() % (SIZE*10);   
+            randlists[j][i] = r;
         }
-        printf("%d ",h->array[i]);
     }
-    printf("\n");
+
+    // format
+    printf("number of children, cycles,\n");
+    int d; // number of kids per node
+    for (d = 2; d <= 10; d++) {
+        // test each array of random numbers
+        long timesum = 0l;
+        for (j = 0; j < ACCURACY; j++){
+            heap *h = new_heap(d, SIZE);
+            clock_t start;
+            clock_t diff;
+            start = clock();
+            for (i = 0; i < SIZE; i++){
+                int r = randlists[j][i];
+                heap_insert(h, r);
+            }
+            diff = clock() - start;
+            timesum += diff;
+            // cleaning up
+            free(h->array);
+            free(h);
+        }
+        // print the average of the tests
+        printf("%d, %ld,\n", d, timesum/ACCURACY);
+    }
+    
 }
