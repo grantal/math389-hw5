@@ -37,8 +37,6 @@ void reck_it(int arraysize, unsigned char* list){
 
 int main(){
     
-    clock_t start;
-    clock_t diff;
     unsigned long mem_size;
     printf("function, input, cycles,\n");
     for ( mem_size = 1000; mem_size < MAX_MEMORY; mem_size += 1000){ 
@@ -47,9 +45,13 @@ int main(){
         long timesum;
         for (i = 0; i < ACCURACY; i++){
             unsigned char *list = (unsigned char *)malloc(mem_size*sizeof(unsigned char)); 
+            clock_t start;
+            clock_t end;
+            clock_t diff;
             start = clock();
             reck_it(mem_size, list);
-            diff = clock() - start;
+            end = clock();
+            diff = end - start;
             timesum += diff;
             free(list);
         }
