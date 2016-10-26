@@ -8,7 +8,7 @@ heap *new_heap(int nokids, int size){
     n->nokids = nokids;
     n->array = (int *)malloc(size*sizeof(int));
     // where to put new numbers 
-    n->current_index = 0;
+    n->current_index = 1;
 }
 
 void heap_insert(heap *self, int value){
