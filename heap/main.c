@@ -7,6 +7,8 @@
 const int ACCURACY = 10;
 // how big to make the heaps
 const int SIZE = 100000;
+// how many children at max
+const int MAX_KIDS = 100;
 
 
 int main () {
@@ -26,9 +28,9 @@ int main () {
     }
 
     // format
-    printf("number of children, cycles,\n");
+    printf("# number of children\tcycles,\n");
     int d; // number of kids per node
-    for (d = 2; d <= 10; d++) {
+    for (d = 2; d <= 100; d++) {
         // test each array of random numbers
         long timesum = 0l;
         for (j = 0; j < ACCURACY; j++){
@@ -47,7 +49,7 @@ int main () {
             free(h);
         }
         // print the average of the tests
-        printf("%d, %ld,\n", d, timesum/ACCURACY);
+        printf("%d\t%ld\n", d, timesum/ACCURACY);
     }
     
 }
