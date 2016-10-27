@@ -4,6 +4,7 @@ Alex Grant
 Math 389
 this will compute the miss penalties
 it will try to access some parts of memory after the cache is full
+This may have bugs, but I didn't end up using this file in my final analysis
 */
 #include <stdio.h>
 #include <stdlib.h>

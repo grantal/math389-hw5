@@ -1,46 +1,40 @@
+/*
+varyn.c
+File to run tests where the size of the heap changes but 
+the d value does not
+*/
 #include <stdio.h>
 #include "heap.h"
 #include <time.h>
 #include <stdlib.h>
+#include <string.h>
+#include <limits.h>
 
 // number of insersion tests to average
-const int ACCURACY = 1000;
+const int ACCURACY = 10;
 // how big to make the heaps
-const int SIZE = 100000;
-// how many children at max
-const int MAX_KIDS = 100;
+const int MAX_SIZE = 10000000;
 
 
-int main () {
-    // generate ACCURACY arrays of SIZE random numbers so that the
-    // random numbers are the same for each heap
-    int **randlists = (int **)malloc(ACCURACY*sizeof(int *));
+int main (int argc, char *argv[]) {
     srand(time(NULL));
-    int i;
-    int j;
-    for (j = 0; j < ACCURACY; j++){
-        randlists[j] = (int *)malloc(SIZE*sizeof(int));
-        for (i = 0; i < SIZE; i++){
-            // random numbers will be capped at SIZE*10 so that 
-            // theres more diversity than if we capped it at SIZE
-            int r = rand() % (SIZE*10);   
-            randlists[j][i] = r;
-        }
-    }
-
+    // get d from args    
+    int d = atoi(argv[1]);
     // format
-    printf("# number of children\tcycles,\n");
-    int d; // number of kids per node
-    for (d = 2; d <= MAX_KIDS; d++) {
-        // test each array of random numbers
+    printf("n\tcycles per element\n");
+    int n; // size of the heap
+    for (n = 100000; n <= MAX_SIZE; n += 100000) {
+        // time 
         long timesum = 0l;
+        int j;
         for (j = 0; j < ACCURACY; j++){
-            heap *h = new_heap(d, SIZE);
+            heap *h = new_heap(d, n+1);
             clock_t start;
             clock_t diff;
+            int i;
             start = clock();
-            for (i = 0; i < SIZE; i++){
-                int r = randlists[j][i];
+            for (i = 0; i < n; i++){
+                int r = rand() % INT_MAX; 
                 heap_insert(h, r);
             }
             diff = clock() - start;
@@ -49,8 +43,8 @@ int main () {
             free(h->array);
             free(h);
         }
-        // print the average of the tests
-        printf("%d\t%ld\n", d, timesum/ACCURACY);
+        // print the sum time per element of the tests
+        printf("%d\t%ld\n", n, timesum/(n*ACCURACY));
     }
     
 }
