@@ -1,3 +1,4 @@
+// lib.c
 #include "lib.h"
 #include <limits.h>
 #include <time.h> 

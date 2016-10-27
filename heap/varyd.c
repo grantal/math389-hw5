@@ -1,3 +1,5 @@
+// varyd.c
+// n remains constant, d changes
 #include <stdio.h>
 #include "heap.h"
 #include <time.h>
